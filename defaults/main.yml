@@ -1,2 +1,43 @@
 ---
 # defaults file for Ansible-NGINX
+ENABLE_SRC_REPO: False
+
+NGINX_CORE_WORKER_PROCESSES: "{{ ansible_processor_vcpus | default(auto) }}"
+NGINX_CORE_WORKER_CONNECTIONS: "768"
+NGINX_CORE_MULTI_ACCEPT: "off"
+
+NGINX_HTTP_CORE_SENDFILE: "on"
+NGINX_HTTP_CORE_TCP_NOPUSH: "on"
+NGINX_HTTP_CORE_TCP_NODELAY: "on"
+NGINX_HTTP_CORE_KEEPALIVE_TIMEOUT: "65"
+NGINX_HTTP_CORE_TYPES_HASH_NAX_SIZE: "2048"
+NGINX_HTTP_CORE_SERVER_NAMES_HASH_BUCKET_SIZE: "64"
+NGINX_HTTP_CORE_SERVER_TOKENS: "off"
+NGINX_HTTP_CORE_DEFAULT_MIME_TYPE: "{{ global_nginx_mime_type }}"
+
+NGINX_ENABLE_SECURITY_HEADERS: True
+NGINX_SECURITY_HEADERS: |
+  add_header X-Frame-Options SAMEORIGIN;
+  add_header X-Content-Type-Options nosniff;
+  add_header X-XSS-Protection "1; mode=block";
+
+NGINX_SSL_ENABLE: True
+NGINX_SSL_CIPHERS: "{{ global_nginx_ssl.ciphers }}"
+NGINX_SSL_PREFER_SERVER_CIPHERS: "{{ global_nginx_ssl.prefer_server_ciphers }}"
+NGINX_SSL_PROTOCOLS: "{{ global_nginx_ssl.protocols }}"
+NGINX_SSL_SESSION_CACHE: "{{ global_nginx_ssl.session_cache }}"
+NGINX_SSL_SESSION_TIMEOUT: "{{ global_nginx_ssl.session_timeout }}"
+NGINX_SSL_DHPARAMS_KEY_SIZE: "{{ global_nginx_ssl.dhparams_key_size }}"
+NGINX_SSL_DHPARAMS_KEY_PATH: "{{ global_nginx_ssl.dhparams_key_path }}"
+
+NGINX_HTTP_LOG_ENABLE_CUSTOM_FORMAT: True
+NGINX_HTTP_LOG_FORMAT: "{{ global_nginx_log.format }}"
+
+NGINX_ENABLE_GZIP: True
+NGINX_GZIP_DISABLE: "msie6"
+NGINX_GZIP_VARY: "on"
+NGINX_GZIP_PROXIED: "any"
+NGINX_COMP_LEVEL: "6"
+NGINX_GZIP_BUFFERS: "16 8k"
+NGINX_GZIP_HTTP_VERSION: "1.1"
+NGINX_GZIP_TYPES: "text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript"
