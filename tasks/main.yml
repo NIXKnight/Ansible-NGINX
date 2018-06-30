@@ -1,2 +1,53 @@
 ---
 # tasks file for Ansible-NGINX
+- name: Add NGINX APT Key
+  apt_key:
+      url: http://nginx.org/keys/nginx_signing.key
+      state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Add NGINX Repository
+  template:
+    src: templates/nginx.list.j2
+    dest: /etc/apt/sources.list.d/nginx.list
+  when: ansible_os_family == 'Debian'
+
+- name: Install NGINX
+  apt:
+    pkg: nginx
+    state: present
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Create sites-available/sites-enabled Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ global_nginx_sites.available_path }}"
+    - "{{ global_nginx_sites.enabled_path }}"
+  when: ansible_os_family == 'Debian'
+
+- name: Remove Default NGINX Site
+  file:
+    path: "{{ global_nginx_confd_dir_path }}/default.conf"
+    state: absent
+  when: ansible_os_family == 'Debian'
+
+- name: Generate OpenSSL Diffie-Hellman Parameters for NGINX
+  openssl_dhparam:
+    path: "{{ NGINX_SSL_DHPARAMS_KEY_PATH }}"
+    size: "{{ NGINX_SSL_DHPARAMS_KEY_SIZE }}"
+    mode: 0400
+    owner: root
+    group: root
+    force: yes
+  when: ansible_os_family == 'Debian' and (NGINX_SSL_ENABLE)
+
+- name: Replace {{ global_nginx_conf_file_path }} with the Template
+  template:
+    src: templates/nginx.conf.j2
+    dest: "{{ global_nginx_conf_file_path }}"
+  when: ansible_os_family == 'Debian'
+  notify: Restart NGINX
