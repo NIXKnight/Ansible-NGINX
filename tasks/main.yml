@@ -51,3 +51,10 @@
     dest: "{{ global_nginx_conf_file_path }}"
   when: ansible_os_family == 'Debian'
   notify: Restart NGINX
+
+- name: Install NGINX vim Scheme
+  copy:
+    src: "files/vim/"
+    dest: "/root/.vim"
+    directory_mode: yes
+  when: ENABLE_NGINX_VIM_SCHEME

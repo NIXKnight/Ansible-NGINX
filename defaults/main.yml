@@ -1,6 +1,7 @@
 ---
 # defaults file for Ansible-NGINX
 ENABLE_SRC_REPO: False
+ENABLE_NGINX_VIM_SCHEME: True
 
 NGINX_CORE_WORKER_PROCESSES: "{{ ansible_processor_vcpus | default(auto) }}"
 NGINX_CORE_WORKER_CONNECTIONS: "768"
