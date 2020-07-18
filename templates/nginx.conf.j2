@@ -23,12 +23,12 @@ http {
   # NGINX Auto Index Module Parameters
   autoindex {{ NGINX_HTTP_CORE_SERVER_TOKENS }};
 
-  {% if NGINX_ENABLE_SECURITY_HEADERS==True %}
+{% if NGINX_ENABLE_SECURITY_HEADERS==True %}
   # NGINX HTTP Headers Module Parameters
   {{ NGINX_SECURITY_HEADERS }}
-  {% endif %}
+{% endif %}
 
-  {% if NGINX_SSL_ENABLE %}
+{% if NGINX_SSL_ENABLE %}
   # NGINX HTTP SSL Module Parameters
   ssl_protocols {{ NGINX_SSL_PROTOCOLS }};
   ssl_session_cache {{ NGINX_SSL_SESSION_CACHE }};
@@ -36,18 +36,18 @@ http {
   ssl_prefer_server_ciphers {{ NGINX_SSL_PREFER_SERVER_CIPHERS }};
   ssl_dhparam {{ NGINX_SSL_DHPARAMS_KEY_PATH }};
   ssl_ciphers '{{ NGINX_SSL_CIPHERS }}';
-  {% endif %}
+{% endif %}
 
   # NGINX HTTP Log Module Parameters
-  {% if NGINX_HTTP_LOG_ENABLE_CUSTOM_FORMAT==True %}
+{% if NGINX_HTTP_LOG_ENABLE_CUSTOM_FORMAT==True %}
   log_format {{ NGINX_HTTP_LOG_FORMAT }}
   access_log /var/log/nginx/access.log main;
-  {% else %}
+{% else %}
   access_log /var/log/nginx/access.log;
-  {% endif %}
+{% endif %}
   error_log /var/log/nginx/error.log;
 
-  {% if NGINX_ENABLE_GZIP==True %}
+{% if NGINX_ENABLE_GZIP==True %}
   # NGINX HTTP Gzip Module Parameters
   gzip on;
   gzip_disable "{{ NGINX_GZIP_DISABLE }}";
@@ -57,7 +57,7 @@ http {
   gzip_buffers {{ NGINX_GZIP_BUFFERS }};
   gzip_http_version {{ NGINX_GZIP_HTTP_VERSION }};
   gzip_types {{ NGINX_GZIP_TYPES }};
-  {% endif %}
+{% endif %}
 
   # Extra Configuration Files
   include {{ global_nginx_confd_dir_path }}/*.conf;
